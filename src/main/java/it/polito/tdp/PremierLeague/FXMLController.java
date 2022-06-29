@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.PuntiS;
+import it.polito.tdp.PremierLeague.model.Team;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,7 +37,7 @@ public class FXMLController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbSquadra"
-    private ComboBox<?> cmbSquadra; // Value injected by FXMLLoader
+    private ComboBox<Team> cmbSquadra; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtN"
     private TextField txtN; // Value injected by FXMLLoader
@@ -48,12 +50,24 @@ public class FXMLController {
 
     @FXML
     void doClassifica(ActionEvent event) {
-
+      txtResult.clear();
+      txtResult.appendText("SQUADRE MIGLIORI : \n");
+      for(PuntiS p:this.model.teamMigliori(cmbSquadra.getValue())) {
+    	  txtResult.appendText(p.toString()+"\n");
+      }
+      txtResult.appendText("\n\n\n\nSQUADRE PEGGIORI : \n");
+      for(PuntiS p:this.model.teamPeggiori(cmbSquadra.getValue())) {
+    	  txtResult.appendText(p.toString()+"\n");
+      }
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+        this.model.creaGrafo();
+        txtResult.setText("GRAFO CRATO CON "+this.model.nVertici()+" vertici e "+ model.nArchi()+" archi!!!\n");
+        for(PuntiS p:this.model.getclassifica()) {
+        	txtResult.appendText(p.toString()+"\n");
+        }
     }
 
     @FXML
@@ -74,5 +88,7 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    		cmbSquadra.getItems().addAll(this.model.teams());
+    	
     }
 }
